@@ -7,3 +7,4 @@ __pycache__/
 user_profile.json
 applier.py
 nerdin_auto_apply.py
+logs/
