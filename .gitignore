@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+.env
+.idea/
+.vscode/
+*.log
+user_profile.json
+applier.py

@@ -1,22 +1,8 @@
-# Copyright (C) 2026 Thiago Faria Mendonça
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 import streamlit as st
 import pandas as pd
 import os
 import subprocess
+import json
 
 # Configuração da página
 st.set_page_config(page_title="Smart Job Hunter Dashboard", page_icon="🤖", layout="wide")
@@ -45,11 +31,6 @@ else:
         search = st.sidebar.text_input("Buscar por cargo ou empresa")
         source_filter = st.sidebar.multiselect("Fonte", options=df['source'].unique(), default=df['source'].unique())
 
-        # Filtro de Relevância (Palavras que VOCÊ quer)
-        st.sidebar.subheader("🎯 Relevância")
-        highlight_terms = st.sidebar.text_input("Termos para destacar (ex: Linux, Python)", "Linux, Python, Suporte")
-        terms_list = [t.strip() for t in highlight_terms.split(",") if t.strip()]
-
         # Aplicar filtros
         mask = df['source'].isin(source_filter)
         if search:
@@ -74,18 +55,32 @@ else:
         # Exibição dos Dados
         st.subheader("📋 Lista de Oportunidades")
         
-        def highlight_jobs(row):
-            title = row['title'].lower()
-            if any(term.lower() in title for term in terms_list):
-                return ['background-color: #d4edda'] * len(row) # Verde claro para matches
-            return [''] * len(row)
-
-        # Formatação para exibição
-        display_df = filtered_df.copy()
-        display_df['link'] = display_df['link'].apply(lambda x: f'<a href="{x}" target="_blank">Abrir Vaga ↗️</a>')
-        
-        # Mostrar tabela formatada
-        st.write(display_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+        # Iterar sobre o dataframe para mostrar cards individuais ou tabela com botões
+        for index, row in filtered_df.iterrows():
+            with st.container():
+                c1, c2, c3, c4 = st.columns([2, 2, 2, 1])
+                c1.write(f"**{row['title']}**")
+                c2.write(row['company'])
+                c3.write(row['source'])
+                
+                # Se for Nerdin, mostrar botão de aplicar
+                if row['source'] == "Nerdin":
+                    job_id = row['link'].split('-')[-1].replace('.php', '')
+                    if c4.button("🚀 Aplicar", key=f"apply_{index}"):
+                        try:
+                            # Chamar o applier.py via subprocess para segurança ou importar
+                            from applier import NerdinApplier
+                            applier = NerdinApplier()
+                            success = applier.apply_to_job(job_id)
+                            if success:
+                                st.toast(f"Candidatura enviada para {row['company']}!", icon="✅")
+                            else:
+                                st.error("Erro ao aplicar. Verifique o log.")
+                        except Exception as e:
+                            st.error(f"Erro: {e}")
+                
+                c4.markdown(f"[Ver Vaga ↗️]({row['link']})")
+                st.divider()
 
     except Exception as e:
         st.error(f"Erro ao carregar os dados: {e}")
