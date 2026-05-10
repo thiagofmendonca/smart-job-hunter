@@ -63,23 +63,11 @@ else:
                 c2.write(row['company'])
                 c3.write(row['source'])
                 
-                # Se for Nerdin, mostrar botão de aplicar
+                # Botão de aplicar redirecionando para o link
                 if row['source'] == "Nerdin":
-                    job_id = row['link'].split('-')[-1].replace('.php', '')
-                    if c4.button("🚀 Aplicar", key=f"apply_{index}"):
-                        try:
-                            # Chamar o applier.py via subprocess para segurança ou importar
-                            from applier import NerdinApplier
-                            applier = NerdinApplier()
-                            success = applier.apply_to_job(job_id)
-                            if success:
-                                st.toast(f"Candidatura enviada para {row['company']}!", icon="✅")
-                            else:
-                                st.error("Erro ao aplicar. Verifique o log.")
-                        except Exception as e:
-                            st.error(f"Erro: {e}")
-                
-                c4.markdown(f"[Ver Vaga ↗️]({row['link']})")
+                    c4.link_button("🚀 Aplicar", row['link'])
+                else:
+                    c4.markdown(f"[Ver Vaga ↗️]({row['link']})")
                 st.divider()
 
     except Exception as e:
