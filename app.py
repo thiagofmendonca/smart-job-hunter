@@ -86,4 +86,4 @@ else:
         st.error(f"Erro ao carregar os dados: {e}")
 
 st.sidebar.markdown("---")
-st.sidebar.info("Bot configurado para LinkedIn, Indeed e Nerdin.")
+st.sidebar.info("Bot configurado para LinkedIn e Nerdin.")
