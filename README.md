@@ -1,9 +1,14 @@
 # Smart Job Hunter Bot 🤖
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_svg)](https://smart-job-hunter-bphtf2uts99z7ycyhcbhao.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 
-Automação para rastreamento de vagas de emprego em diversas plataformas (LinkedIn, Indeed, etc.), focada em posições remotas de TI.
+Automação para rastreamento de vagas de emprego em diversas plataformas, focada em posições remotas de TI.
+
+---
+
+## 🚀 Live Demo
+Você pode acompanhar as vagas encontradas em tempo real através do nosso dashboard interativo:
+👉 **[Acessar Smart Job Hunter Dashboard](https://smart-job-hunter-bphtf2uts99z7ycyhcbhao.streamlit.app/)**
 
 ---
 
